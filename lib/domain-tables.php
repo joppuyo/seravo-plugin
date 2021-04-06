@@ -22,6 +22,7 @@ class Seravo_Domains_List_Table extends WP_List_Table {
         'singular' => 'domain',
         'plural'   => 'domains',
         'ajax'     => true,
+        'screen'   => 'seravo-domains',
       )
     );
 
@@ -314,6 +315,7 @@ class Seravo_Mails_Forward_Table extends WP_List_Table {
         'singular' => 'mail-forward',
         'plural'   => 'mail-forwards',
         'ajax'     => true,
+        'screen'   => 'seravo-domains',
       )
     );
   }
