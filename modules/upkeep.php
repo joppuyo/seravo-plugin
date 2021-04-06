@@ -478,7 +478,7 @@ if ( ! class_exists('Upkeep') ) {
         <img src="/wp-admin/images/spinner.gif" style="display:inline-block">
         <?php _e('Updating... Please wait up to 5 seconds', 'seravo'); ?>
       </div>
-      <button id='seravo_plugin_update_button' class='hidden'><?php _e('Update plugin now', 'seravo'); ?></button>
+      <button id='seravo_plugin_update_button' class='button hidden'><?php _e('Update plugin now', 'seravo'); ?></button>
       <?php
     }
 
