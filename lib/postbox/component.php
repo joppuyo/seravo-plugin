@@ -114,6 +114,10 @@ if ( ! class_exists('Component') ) {
       return $component;
     }
 
+    public static function paragraph( $paragraph ) {
+      return self::html('<p>' . $paragraph . '</p>');
+    }
+
 
     /**#########################
      * ### MID LEVEL HELPERS ###
