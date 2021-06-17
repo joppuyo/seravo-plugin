@@ -7,6 +7,10 @@
 
 namespace Seravo;
 
+use \Seravo\Postbox\Postboxes;
+use \Seravo\Postbox\Toolpage;
+use \Seravo\Postbox\Requirements;
+
 require_once dirname(__FILE__) . '/../lib/backups-ajax.php';
 
 // Deny direct access to this file
@@ -26,6 +30,31 @@ if ( ! class_exists('Backups') ) {
       // TODO: check if this hook actually ever fires for mu-plugins
       register_activation_hook(__FILE__, array( __CLASS__, 'register_view_backups_capability' ));
 
+      $page = new Toolpage('tools_page_backups_page');
+
+      /**
+       * Backup excludes postbox
+       */
+      $backup_excludes = new Postboxes\Postbox_Auto_Command('backup-excludes');
+      $backup_excludes->set_title(__('Files Excluded from the Backups', 'seravo'));
+      $backup_excludes->set_auto_command('cat /data/backups/exclude.filelist', 60);
+      $backup_excludes->set_info_text(__('Below are the contents of <code>/data/backups/exclude.filelist</code>.', 'seravo'));
+      $backup_excludes->set_requirements(array( Requirements::CAN_BE_ANY_ENV => true ));
+      $page->register_postbox($backup_excludes);
+
+      /**
+       * Current Backups postbox
+       */
+      $backups_list = new Postboxes\Postbox_Auto_Command('backups-list');
+      $backups_list->set_title(__('Current Backups', 'seravo'));
+      $backups_list->set_auto_command('wp-backup-status 2>&1', 60);
+      $backups_list->set_info_text(__('This list is produced by the command <code>wp-backup-status</code>.', 'seravo'));
+      $backups_list->set_requirements(array( Requirements::CAN_BE_ANY_ENV => true ));
+      $page->register_postbox($backups_list);
+
+      $page->enable_ajax();
+      $page->register_page();
+
       \Seravo\Postbox\seravo_add_raw_postbox(
         'backups-info',
         __('Backups', 'seravo'),
@@ -40,22 +69,6 @@ if ( ! class_exists('Backups') ) {
         array( __CLASS__, 'backups_create_postbox' ),
         'tools_page_backups_page',
         'normal'
-      );
-
-      \Seravo\Postbox\seravo_add_raw_postbox(
-        'backups-excludes',
-        __('Files Excluded from the Backups', 'seravo'),
-        array( __CLASS__, 'backups_excludes_postbox' ),
-        'tools_page_backups_page',
-        'side'
-      );
-
-      \Seravo\Postbox\seravo_add_raw_postbox(
-        'backups-list',
-        __('Current Backups', 'seravo'),
-        array( __CLASS__, 'backups_list_postbox' ),
-        'tools_page_backups_page',
-        'side'
       );
     }
 
@@ -95,30 +108,6 @@ if ( ! class_exists('Backups') ) {
         <button id="create_backup_button" class="button-primary"><?php _e('Create a backup', 'seravo'); ?> </button>
         <div id="create_backup_loading"><img class="hidden" src="/wp-admin/images/spinner.gif"></div>
         <pre><div id="create_backup"></div></pre>
-      </p>
-      <?php
-    }
-
-    public static function backups_excludes_postbox() {
-      // translators: %s name of the file shown
-      printf(__('Below are the contents of %s.', 'seravo'), '<code>/data/backups/exclude.filelist</code>');
-      ?>
-      <p>
-        <div id="backup_exclude_loading">
-          <img src="/wp-admin/images/spinner.gif">
-        </div>
-        <pre id="backup_exclude"></pre>
-      </p>
-      <?php
-    }
-
-    public static function backups_list_postbox() {
-      // translators: %s command used to list WordPress backups of the website
-      printf(__('This list is produced by the command %s.', 'seravo'), '<code>wp-backup-status</code>');
-      ?>
-      <p>
-        <div id="backup_status_loading"><img src="/wp-admin/images/spinner.gif"></div>
-        <pre id="backup_status"></pre>
       </p>
       <?php
     }
