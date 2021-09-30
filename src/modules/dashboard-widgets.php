@@ -220,7 +220,7 @@ class DashboardWidgets {
       $data_size = $data_size !== false ? $data_size[0] : 0;
     }
 
-    $plan_details = API::get_site_data();
+    $plan_details = \Seravo\API\Site::get_site();
     if ( \is_wp_error($plan_details) ) {
       $plan_disk_limit = 0;
     } else {
@@ -306,7 +306,7 @@ class DashboardWidgets {
    */
   public static function get_site_status() {
     $data = array();
-    $site_info = API::get_site_data();
+    $site_info = \Seravo\API\Site::get_site();
 
     if ( \is_wp_error($site_info) ) {
       \error_log($site_info->get_error_message());

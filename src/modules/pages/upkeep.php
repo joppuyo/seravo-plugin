@@ -265,7 +265,7 @@ class Upkeep extends Toolpage {
    * @return array<string,array|string>
    */
   public static function get_update_status() {
-    $site_info = API::get_site_data();
+    $site_info = \Seravo\API\Site::get_site();
     $data = array();
 
     if ( \is_wp_error($site_info) ) {
@@ -650,7 +650,7 @@ class Upkeep extends Toolpage {
    */
   public static function get_seravo_updates_data() {
     $data = array();
-    $site_info = API::get_site_data();
+    $site_info = \Seravo\API\Site::get_site();
     if ( \is_wp_error($site_info) ) {
       \error_log($site_info->get_error_message());
       $data['error'] = __('An API error occured. Please try again later', 'seravo');

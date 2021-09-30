@@ -24,7 +24,7 @@ class Shadow {
 
     // Check if shadows were cached
     if ( $shadow_list === false ) {
-      $shadow_list = API::get_site_data('/shadows');
+      $shadow_list = \Seravo\API\Shadow::get_shadows();
       if ( \is_wp_error($shadow_list) ) {
         return false;
       }

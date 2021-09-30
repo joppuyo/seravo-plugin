@@ -629,7 +629,7 @@ class SiteStatus extends Toolpage {
    */
   public static function get_disk_usage() {
     $response = new AjaxResponse();
-    $api_response = API::get_site_data();
+    $api_response = \Seravo\API\Site::get_site();
 
     if ( \is_wp_error($api_response) ) {
       \error_log($api_response->get_error_message());
@@ -749,7 +749,7 @@ class SiteStatus extends Toolpage {
    * @return array<string, string>
    */
   public static function get_site_info() {
-    $info = API::get_site_data();
+    $info = \Seravo\API\Site::get_site();
     $data = array();
 
     if ( \is_wp_error($info) ) {
@@ -879,7 +879,7 @@ class SiteStatus extends Toolpage {
    */
   public static function get_shadows_data() {
     $data = array();
-    $shadow_data = API::get_site_data('/shadows');
+    $shadow_data = \Seravo\API\Shadow::get_shadows();
 
     if ( \is_wp_error($shadow_data) ) {
       \error_log($shadow_data->get_error_message());
@@ -908,7 +908,7 @@ class SiteStatus extends Toolpage {
     if ( $polling === false ) {
       // run the shadow reset here
       if ( isset($_POST['shadow']) && $_POST['shadow'] !== '' ) {
-        $shadows = API::get_site_data('/shadows');
+        $shadows = \Seravo\API\Shadow::get_shadows();
         $shadow = $_POST['shadow'];
 
         if ( \is_wp_error($shadows) ) {

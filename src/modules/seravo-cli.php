@@ -47,7 +47,7 @@ final class SeravoCLI extends \WP_CLI_Command {
    * @return void
    */
   public function updates( $args, $assoc_args ) {
-    $site_info = API::get_site_data();
+    $site_info = \Seravo\API\Site::get_site();
     if ( \is_wp_error($site_info) ) {
       \WP_CLI::error('Seravo API failed to return information about updates.');
       return;
