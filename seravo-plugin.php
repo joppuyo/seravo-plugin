@@ -50,6 +50,9 @@ if ( ! \class_exists(\Seravo\Postbox\Postbox::class) ) {
  *
  */
 
+require_once 'src/lib/api/site.php';
+require_once 'src/lib/api/shadow.php';
+
 /**
  * Load Seravo postbox functionalities
  */
