@@ -8,16 +8,29 @@ namespace Seravo;
  */
 class API {
 
+  const API_HOSTS = array(
+    'v1' => 'http://localhost:8888/v1/site/',
+    'v2' => 'http://172.17.42.1:8282/sites/',
+  );
+
+  /**
+   * Get the latest available API version. This is just a temp solution.
+   * @return string Latest available API version.
+   */
+  public static function get_api_version() {
+    return get_site_option('seravo_api_version', 'v1');
+  }
+
   /**
    * Get various data from the site API for the current site.
    * @param string $api_query          The API endpoint with the neccesary parameters.
    * @param int[]  $handled_http_codes HTTP codes that are handled. Others will return \WP_Error.
+   * @param string $api_version        The API version to use. Invalid version will cause problems.
+   *
    * @return \WP_Error|mixed[] Decoded data returned or WP_Error object if request failed or JSON decode failed.
    */
-  public static function get_site_data( $api_query = '', $handled_http_codes = array( 200 ) ) {
-    $site = \getenv('USER');
-
-    $ch = \curl_init('http://localhost:8888/v1/site/' . $site . $api_query);
+  public static function get_site_data( string $api_query = '', $handled_http_codes = array( 200 ), $api_version = 'v1' ) {
+    $ch = \curl_init(self::API_HOSTS[$api_version] . \getenv('USER') . $api_query);
     if ( $ch === false ) {
       // CurlHandle couldn't be created
       return new \WP_Error('seravo-api-get-fail', __('API call failed. Aborting. The error has been logged.', 'seravo'));
